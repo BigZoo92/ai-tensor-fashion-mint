@@ -1,46 +1,100 @@
-# Getting Started with Create React App
+# **FashionMNIST ONNX Classifier**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project demonstrates a machine learning pipeline for classifying FashionMNIST dataset images using a Convolutional Neural Network (CNN) trained with PyTorch, exported to ONNX format, and deployed in a React-based web application. The deployed application allows users to upload an image, preprocess it, and classify it using the trained ONNX model.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## **Live Demo**
 
-### `npm start`
+You can access the live application here:  
+[https://ai-tensor-fashion-mint.vercel.app/](https://ai-tensor-fashion-mint.vercel.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## **Contributors**
 
-### `npm test`
+- **Clément Souplet**  
+- **Enzo Givernaud**  
+- **Gabriel Dautreppe**  
+- **Charles Chrismann**  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## **Overview**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### **Jupyter Notebook Workflow**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Dataset Loading and Preprocessing**:
+   - The FashionMNIST dataset is loaded using `torchvision.datasets`.
+   - Normalization is applied to ensure consistent pixel value ranges.
+   - The dataset is split into training and testing sets and visualized using Matplotlib.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Mean and Standard Deviation Calculation**:
+   - The mean and standard deviation of the dataset are calculated to fine-tune the normalization process.
 
-### `npm run eject`
+3. **Model Architecture**:
+   - A Convolutional Neural Network (CNN) is designed with:
+     - **Convolutional layers** to extract spatial features.
+     - **Fully connected layers** for classification into 10 classes (e.g., T-shirt, trouser, bag).
+   - The model is trained on the dataset using the AdamW optimizer and CrossEntropy loss.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. **Training and Evaluation**:
+   - A training loop is implemented to update the model weights.
+   - Accuracy and loss metrics are logged using TensorBoard.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ![Accurency And Loss](./image.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+5. **Model Export to ONNX**:
+   - The trained PyTorch model is exported to ONNX format using `torch.onnx.export` for deployment.
+   - Dynamic axes are defined for handling variable batch sizes.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+6. **Inference with ONNX Runtime**:
+   - The exported model is tested with ONNX Runtime to ensure consistency with the PyTorch implementation.
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### **Frontend: Image Preprocessing and Prediction**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The React web application preprocesses user-uploaded images and passes them to the ONNX model for classification:
+
+1. **Image Upload**:
+   - Users can upload an image using an Ant Design file uploader.
+   - The uploaded image is displayed for preview.
+
+2. **Image Preprocessing**:
+   - The image is resized to **28x28 pixels** and converted to grayscale to match the FashionMNIST dataset format.
+   - Pixel values are normalized using the mean and standard deviation calculated during training.
+
+3. **Prediction**:
+   - The preprocessed image is converted to a tensor and fed into the ONNX model.
+   - The model outputs a probability for each class.
+   - The top predictions are displayed with their respective probabilities as percentages.
+
+4. **User Interface**:
+   - The probabilities are visually represented with progress bars (Ant Design components).
+   - The prediction results are displayed dynamically after inference.
+
+---
+
+## **Technologies Used**
+
+### **Backend**
+- **PyTorch**: For training the CNN model.
+- **ONNX Runtime**: For running inference with the exported ONNX model.
+- **Jupyter Notebook**: For data preprocessing, training, and testing.
+
+### **Frontend**
+- **React**: For building the user interface.
+- **Ant Design**: For styling and UI components.
+- **onnxruntime-web**: For running ONNX models in the browser.
+
+---
+
+## **Key Features**
+- **Train Once, Deploy Anywhere**: The model is trained with PyTorch and deployed in the browser using ONNX.
+- **Real-Time Inference**: The app processes user-uploaded images and classifies them instantly.
+- **Interactive Visualization**: Displays top predictions with probabilities in an intuitive manner.
+
+---
+
+Feel free to explore the application and the codebase! Let us know if you have any feedback. 😊
